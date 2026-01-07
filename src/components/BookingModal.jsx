@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CheckCircle, ArrowRight, User, Phone, GraduationCap, BookOpen, MapPin } from 'lucide-react';
+import { X, CheckCircle, ArrowRight } from 'lucide-react';
 
 const BookingModal = ({ isOpen, onClose }) => {
     const [step, setStep] = useState(1);
@@ -85,189 +85,202 @@ const BookingModal = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 font-sans">
             {/* Backdrop */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={onClose}
-                className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             />
 
             {/* Modal Card */}
             <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden"
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                className="relative w-full max-w-[400px] bg-white rounded-3xl shadow-2xl overflow-hidden"
             >
-                {/* Close Button */}
-                <button
-                    onClick={onClose}
-                    className="absolute top-4 right-4 p-2 text-gray-400 hover:text-black hover:bg-gray-100 rounded-full transition-all z-10"
-                >
-                    <X size={20} />
-                </button>
-
-                <div className="p-8 lg:p-10">
-                    <AnimatePresence mode="wait">
-                        {!isSubmitted ? (
-                            <motion.div
-                                key={step}
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                transition={{ duration: 0.3 }}
+                {!isSubmitted ? (
+                    <>
+                        {/* Header */}
+                        <div className="bg-[#FFC107] p-6 pt-8 text-center relative">
+                            <button
+                                onClick={onClose}
+                                className="absolute top-4 right-4 p-1 text-black/60 hover:text-black hover:bg-black/10 rounded-full transition-all"
                             >
-                                <div className="mb-8">
-                                    <div className="flex gap-2 mb-4">
-                                        <div className={`h-1.5 rounded-full flex-1 transition-all duration-500 ${step >= 1 ? 'bg-[#008080]' : 'bg-gray-100'}`} />
-                                        <div className={`h-1.5 rounded-full flex-1 transition-all duration-500 ${step >= 2 ? 'bg-[#008080]' : 'bg-gray-100'}`} />
-                                    </div>
-                                    <h2 className="text-2xl font-bold text-black">
-                                        {step === 1 ? 'Get Started' : 'Almost There!'}
-                                    </h2>
-                                    <p className="text-black text-sm mt-1">
-                                        {step === 1 ? 'Fill in your basic details to continue.' : 'Provide academic details for better guidance.'}
-                                    </p>
-                                </div>
+                                <X size={20} />
+                            </button>
 
-                                <form onSubmit={step === 1 ? handleStep1Submit : handleFinalSubmit} className="space-y-5">
-                                    {step === 1 ? (
-                                        <>
-                                            <div className="space-y-2">
-                                                <label className="text-xs font-bold text-black opacity-40 uppercase tracking-wider ml-1">Student Name</label>
-                                                <div className="relative">
-                                                    <User className="absolute left-4 top-1/2 -translate-y-1/2 text-black opacity-30" size={18} />
+                            <h2 className="text-[22px] font-bold text-black mb-1 tracking-tight">
+                                Book Your Free Demo
+                            </h2>
+                            <p className="text-black/80 text-sm mb-5 font-medium">
+                                {step === 1 ? "Step 1: Let's get to know you" : "Step 2: Academic Details"}
+                            </p>
+
+                            {/* Step Indicator */}
+                            <div className="flex justify-center items-center gap-1.5">
+                                <motion.div
+                                    animate={{ width: step === 1 ? 24 : 6, opacity: step === 1 ? 1 : 0.4 }}
+                                    className="h-1.5 bg-black rounded-full transition-all duration-300"
+                                />
+                                <motion.div
+                                    animate={{ width: step === 2 ? 24 : 6, opacity: step === 2 ? 1 : 0.4 }}
+                                    className="h-1.5 bg-black rounded-full transition-all duration-300"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="p-6 md:p-8">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={step}
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <form onSubmit={step === 1 ? handleStep1Submit : handleFinalSubmit} className="space-y-5">
+                                        {step === 1 ? (
+                                            <>
+                                                <div className="space-y-2">
+                                                    <label className="text-sm font-bold text-gray-800 ml-1">Student Name</label>
                                                     <input
                                                         type="text"
                                                         name="studentName"
                                                         required
-                                                        placeholder="Enter student name"
+                                                        placeholder="e.g. Mohammed Ali"
+                                                        style={{ color: '#000000' }}
                                                         value={formData.studentName}
                                                         onChange={handleChange}
-                                                        className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-transparent focus:border-[#008080] focus:bg-white rounded-xl outline-none transition-all text-black font-medium"
+                                                        className="w-full px-4 py-3 bg-white border border-gray-300 focus:border-[#008080] focus:ring-1 focus:ring-[#008080] rounded-xl outline-none transition-all placeholder:text-gray-400 font-medium"
                                                     />
                                                 </div>
-                                            </div>
-                                            <div className="space-y-2">
-                                                <label className="text-xs font-bold text-black opacity-40 uppercase tracking-wider ml-1">WhatsApp Number</label>
-                                                <div className="relative">
-                                                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-black opacity-30" size={18} />
+                                                <div className="space-y-2">
+                                                    <label className="text-sm font-bold text-gray-800 ml-1">WhatsApp Number (GCC)</label>
                                                     <input
                                                         type="tel"
                                                         name="whatsappNumber"
                                                         required
-                                                        placeholder="Enter WhatsApp number"
+                                                        placeholder="e.g. +971 50 123 4567"
+                                                        style={{ color: '#000000' }}
                                                         value={formData.whatsappNumber}
                                                         onChange={handleChange}
-                                                        className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-transparent focus:border-[#008080] focus:bg-white rounded-xl outline-none transition-all text-black font-medium"
+                                                        className="w-full px-4 py-3 bg-white border border-gray-300 focus:border-[#008080] focus:ring-1 focus:ring-[#008080] rounded-xl outline-none transition-all placeholder:text-gray-400 font-medium"
                                                     />
                                                 </div>
-                                            </div>
-                                            <button
-                                                type="submit"
-                                                disabled={loading}
-                                                className="w-full bg-[#008080] text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-[#008080]/20 hover:bg-[#006666] transition-all flex items-center justify-center gap-2 mt-4"
-                                            >
-                                                {loading ? 'Processing...' : (
-                                                    <>
-                                                        Next
-                                                        <ArrowRight size={18} />
-                                                    </>
-                                                )}
-                                            </button>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <div className="space-y-2">
-                                                <label className="text-xs font-bold text-black opacity-40 uppercase tracking-wider ml-1">Grade / Class</label>
-                                                <div className="relative">
-                                                    <GraduationCap className="absolute left-4 top-1/2 -translate-y-1/2 text-black opacity-30" size={18} />
-                                                    <input
-                                                        type="text"
+
+                                                <button
+                                                    type="submit"
+                                                    disabled={loading}
+                                                    className="w-full bg-[#008080] hover:bg-[#006666] text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-[#008080]/20 transition-all flex items-center justify-center gap-2 mt-4"
+                                                >
+                                                    {loading ? 'Processing...' : (
+                                                        <>
+                                                            Next Step
+                                                            <ArrowRight size={20} className="stroke-[2.5]" />
+                                                        </>
+                                                    )}
+                                                </button>
+
+                                                <p className="text-[10px] text-gray-400 text-center leading-tight mt-4 px-4">
+                                                    By submitting, you agree to our Privacy Policy and allow us to contact you via WhatsApp/Call.
+                                                </p>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="space-y-2">
+                                                    <label className="text-sm font-bold text-gray-800 ml-1">Grade / Class</label>
+                                                    <select
                                                         name="grade"
                                                         required
-                                                        placeholder="e.g. 10th Standard"
                                                         value={formData.grade}
                                                         onChange={handleChange}
-                                                        className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-transparent focus:border-[#008080] focus:bg-white rounded-xl outline-none transition-all text-black font-medium"
-                                                    />
+                                                        style={{ color: '#000000' }}
+                                                        className="w-full px-4 py-3 bg-white border border-gray-300 focus:border-[#008080] focus:ring-1 focus:ring-[#008080] rounded-xl outline-none transition-all font-medium appearance-none"
+                                                    >
+                                                        <option value="" disabled>Select Grade</option>
+                                                        <option value="KG 1">KG 1</option>
+                                                        <option value="KG 2">KG 2</option>
+                                                        {[...Array(12)].map((_, i) => (
+                                                            <option key={i + 1} value={`Grade ${i + 1}`}>Grade {i + 1}</option>
+                                                        ))}
+                                                    </select>
                                                 </div>
-                                            </div>
-                                            <div className="space-y-2">
-                                                <label className="text-xs font-bold text-black opacity-40 uppercase tracking-wider ml-1">Subject</label>
-                                                <div className="relative">
-                                                    <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 text-black opacity-30" size={18} />
+                                                <div className="space-y-2">
+                                                    <label className="text-sm font-bold text-gray-800 ml-1">Subject</label>
                                                     <input
                                                         type="text"
                                                         name="subject"
                                                         required
                                                         placeholder="e.g. Mathematics"
+                                                        style={{ color: '#000000' }}
                                                         value={formData.subject}
                                                         onChange={handleChange}
-                                                        className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-transparent focus:border-[#008080] focus:bg-white rounded-xl outline-none transition-all text-black font-medium"
+                                                        className="w-full px-4 py-3 bg-white border border-gray-300 focus:border-[#008080] focus:ring-1 focus:ring-[#008080] rounded-xl outline-none transition-all placeholder:text-gray-400 font-medium"
                                                     />
                                                 </div>
-                                            </div>
-                                            <div className="space-y-2">
-                                                <label className="text-xs font-bold text-black opacity-40 uppercase tracking-wider ml-1">Place</label>
-                                                <div className="relative">
-                                                    <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-black opacity-30" size={18} />
+                                                <div className="space-y-2">
+                                                    <label className="text-sm font-bold text-gray-800 ml-1">Location (GCC)</label>
                                                     <input
                                                         type="text"
                                                         name="place"
                                                         required
-                                                        placeholder="Enter your location"
+                                                        placeholder="e.g. Dubai, Riyadh, Doha"
+                                                        style={{ color: '#000000' }}
                                                         value={formData.place}
                                                         onChange={handleChange}
-                                                        className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-transparent focus:border-[#008080] focus:bg-white rounded-xl outline-none transition-all text-black font-medium"
+                                                        className="w-full px-4 py-3 bg-white border border-gray-300 focus:border-[#008080] focus:ring-1 focus:ring-[#008080] rounded-xl outline-none transition-all placeholder:text-gray-400 font-medium"
                                                     />
                                                 </div>
-                                            </div>
-                                            <div className="flex gap-3 mt-4">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setStep(1)}
-                                                    className="flex-1 bg-gray-100 text-black py-4 rounded-xl font-bold hover:bg-gray-200 transition-all"
-                                                >
-                                                    Back
-                                                </button>
-                                                <button
-                                                    type="submit"
-                                                    disabled={loading}
-                                                    className="flex-[2] bg-yellow-400 text-black py-4 rounded-xl font-bold shadow-lg shadow-yellow-400/20 hover:bg-[#008080] hover:text-white transition-all flex items-center justify-center gap-2"
-                                                >
-                                                    {loading ? 'Submitting...' : 'Complete Booking'}
-                                                </button>
-                                            </div>
-                                        </>
-                                    )}
-                                </form>
-                            </motion.div>
-                        ) : (
-                            <motion.div
-                                key="success"
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                className="text-center py-8"
-                            >
-                                <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                                    <CheckCircle size={40} />
-                                </div>
-                                <h2 className="text-2xl font-bold text-black mb-2">Registration Successful!</h2>
-                                <p className="text-black mb-8">Our expert mentors will contact you on WhatsApp shortly.</p>
-                                <button
-                                    onClick={onClose}
-                                    className="px-8 py-3 bg-gray-900 text-white rounded-full font-bold hover:bg-black transition-all"
-                                >
-                                    Close
-                                </button>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </div>
+
+                                                <div className="flex gap-3 mt-6">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setStep(1)}
+                                                        className="flex-1 bg-gray-100 text-black py-4 rounded-xl font-bold hover:bg-gray-200 transition-all text-sm"
+                                                    >
+                                                        Back
+                                                    </button>
+                                                    <button
+                                                        type="submit"
+                                                        disabled={loading}
+                                                        className="flex-[2] bg-[#008080] hover:bg-[#006666] text-white py-4 rounded-xl font-bold shadow-lg shadow-[#008080]/20 transition-all flex items-center justify-center gap-2 text-sm"
+                                                    >
+                                                        {loading ? 'Submitting...' : 'Complete Booking'}
+                                                    </button>
+                                                </div>
+                                            </>
+                                        )}
+                                    </form>
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
+                    </>
+                ) : (
+                    <motion.div
+                        key="success"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="bg-white p-8 lg:p-10 text-center flex flex-col items-center justify-center h-full min-h-[400px]"
+                    >
+                        <div className="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center mb-6">
+                            <CheckCircle size={40} className="stroke-[2.5]" />
+                        </div>
+                        <h2 className="text-2xl font-bold text-black mb-3">Registration Successful!</h2>
+                        <p className="text-gray-600 mb-8 max-w-[260px] mx-auto leading-relaxed">
+                            Our academic counselor will contact you shortly on WhatsApp.
+                        </p>
+                        <button
+                            onClick={onClose}
+                            className="px-10 py-3.5 bg-black text-white rounded-xl font-bold hover:bg-gray-800 transition-all shadow-xl shadow-black/10"
+                        >
+                            Close
+                        </button>
+                    </motion.div>
+                )}
             </motion.div>
         </div>
     );
